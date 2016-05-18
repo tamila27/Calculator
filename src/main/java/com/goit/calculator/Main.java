@@ -1,13 +1,14 @@
+package com.goit.calculator;
+
 import com.goit.calculator.manager.UserManager;
 import com.goit.calculator.model.User;
-import com.goit.calculator.util.ExpressionParser;
+import com.goit.calculator.util.MathExpressionParser;
 import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 
 import java.util.HashMap;
 
 import static spark.Spark.get;
-import static spark.Spark.staticFileLocation;
 /**
  * Created by tamila on 5/14/16.
  */
@@ -15,29 +16,27 @@ public class Main {
     private static User user;
 
     public static void main(String[] args){
-        staticFileLocation("/public");
-
         get("/", (request, response) -> {
             HashMap model = new HashMap();
 
             String userName = request.queryParams("userName");
             String password = request.queryParams("password");
-            if(userName != null & password != null){
+            if(!isBlank(userName) & !isBlank(password)){
                 user = UserManager.getUserFromDB(userName, password);
             }
 
             model.put("userName", user==null?"guest":user.getUserName());
             String expression = request.queryParams("expression");
 
-            ExpressionParser expressionParser = new ExpressionParser();
+            MathExpressionParser mathExpressionParser = new MathExpressionParser();
             String calculatingResult;
             try{
-                calculatingResult = expressionParser.calculateExpression(expression == null?"":expression).toString();
-            } catch(NumberFormatException exception){
-                calculatingResult = "Please enter a valid expression for calculation";
+                calculatingResult = mathExpressionParser.calculateExpression(isBlank(expression)?"":expression).toString();
+            } catch( NullPointerException | IllegalArgumentException exception){
+                calculatingResult = "Please enter a valid expression";
             }
 
-            model.put("expression", calculatingResult == null?0:calculatingResult);
+            model.put("expression", isBlank(calculatingResult)?0:calculatingResult);
 
             return new ModelAndView(model, "templates/hello.vtl");
         }, new VelocityTemplateEngine());
@@ -64,5 +63,9 @@ public class Main {
         get("/login", (request, response) -> {
             return new ModelAndView(new HashMap(), "templates/login.vtl");
         }, new VelocityTemplateEngine());
+    }
+
+    public static boolean isBlank(String s) {
+        return s == null ||"".equals(s.trim());
     }
 }

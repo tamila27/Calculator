@@ -22,7 +22,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>com.goit.CalculatorService</mainClass>
+                    <mainClass>com.goit.Main</mainClass>
                     <arguments></arguments>
                 </configuration>
             </plugin>

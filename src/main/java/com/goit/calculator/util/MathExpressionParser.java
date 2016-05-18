@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 /**
  * Created by tamila on 5/14/16.
  */
-public class ExpressionParser {
+public class MathExpressionParser {
 
     public List<String> parseExpression(String expression){
         StringTokenizer stringTokenizer = new StringTokenizer(expression, "+-*/()", true);
@@ -36,9 +36,17 @@ public class ExpressionParser {
         }
     }
 
-    private void calculateSimpleExpression(LinkedList<Double> numbers, String operator) {
-        Double someOne = numbers.removeLast();
-        Double someTwo = numbers.removeLast();
+    private void calculateSimpleExpression(LinkedList<Double> numbers, String operator) throws NullPointerException, IllegalArgumentException {
+        if(numbers == null || operator == null) {
+            throw new NullPointerException();
+        }
+
+        if( numbers.size() < 2 && !(operator.equals("+") || operator.equals("-")) ){
+            throw new IllegalArgumentException();
+        }
+
+        Double someOne = ( numbers.size() > 0) ? numbers.removeLast() : 0.0;
+        Double someTwo = ( numbers.size() > 0) ? numbers.removeLast() : 0.0;
 
         switch(operator) {
             case "+":
@@ -54,11 +62,11 @@ public class ExpressionParser {
                 numbers.add(someTwo / someOne);
                 break;
             default:
-                System.out.println("Error "+operator);
+                throw new IllegalArgumentException();
         }
     }
 
-    public Double calculateExpression(String s) throws NumberFormatException{
+    public Double calculateExpression(String s) throws NumberFormatException, IllegalArgumentException, NullPointerException{
 
         if(s == null || s.equals(""))
             return 0.0;
@@ -85,7 +93,6 @@ public class ExpressionParser {
                 try {
                     numbers.add(Double.parseDouble(token));
                 } catch (NumberFormatException exception){
-                    System.err.println(exception.getMessage());
                     throw exception;
                 }
             }
