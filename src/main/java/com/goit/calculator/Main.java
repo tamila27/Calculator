@@ -38,7 +38,7 @@ public class Main {
 
             model.put("expression", isBlank(calculatingResult)?0:calculatingResult);
 
-            return new ModelAndView(model, "templates/hello.vtl");
+            return new ModelAndView(model, "templates/main.vtl");
         }, new VelocityTemplateEngine());
 
         get("/registration", (request, response) -> {

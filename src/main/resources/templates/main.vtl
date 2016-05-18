@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello Friend!</title>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <style>
+        div.form-group {
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+
+#if($userName == 'guest')
+    <a class="link" href="/registration" >Registraton</a>
+    <a class="link" href="/login">Login</a>
+#end
+<h1>Hello $userName</h1>
+<h1>Fill in your expression for calculating</h1>
+<form action='/'>
+    <div class="form-group" >
+
+        <input id="expression" name="expression" class="form-control" type="text" value="$expression" >
+    </div>
+    <button type="submit" class="btn">Calculate</button>
+</form>
+
+</body>
+</html>
